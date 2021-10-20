@@ -1,0 +1,9 @@
+Setup environment by following this repo readme: https://github.com/learnwithsumit/nodejs-basic-bangla
+
+1.Nodejs is developed by Ryan Dahl in 2009 which use chrome v8 engine (by cpp)
+2.npm develop by github & yarn develop by facebook.
+3.npm install yarn (to install yarn)
+4.Recommended vscode extention (Airbnb, ESLint, Prettier, Path Autocomplete)
+5. nodejs has a global object
+6. Common core module:
+    path, os, fs, events 
