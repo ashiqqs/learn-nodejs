@@ -6,4 +6,6 @@ Setup environment by following this repo readme: https://github.com/learnwithsum
 4.Recommended vscode extention (Airbnb, ESLint, Prettier, Path Autocomplete)
 5. nodejs has a global object
 6. Common core module:
-    path, os, fs, events 
+    path, os, fs, events, http, url 
+
+7. install nodemon pkg for keep running nodejs server (run nodemon filename.js)
