@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "SET NODE_ENV=staging& nodemon index.js",
+    "prod": "SET NODE_ENV=production& nodemon index.js"
   },
   "dependencies": {
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "npm": "^8.1.1"
   }
 }
