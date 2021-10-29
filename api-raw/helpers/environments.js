@@ -6,11 +6,13 @@
 const environments = {
     staging: {
         port: 3000,
-        envName: 'Staging'
+        envName: 'Staging',
+        secretKey: 'MyStagingSecretKey'
     },
     production: {
         port: 5000,
-        envName: 'Production'
+        envName: 'Production',
+        secretKey:"MyProductionSecretKey"
     }
 }
 
