@@ -3,9 +3,10 @@
  * Data: 202110291141
  */
 
-const { ENTITY } = require("../../helpers/helper.enums");
+const { ENTITY, HTTP_STATUS, MESSAGE } = require("../../helpers/helper.enums");
 const utilities = require("../../helpers/utilities");
 const db = require("../../lib/data");
+const { _token } = require("./token-handler");
 
 const allowdMethod = ["get", "post", "put", "delete"];
 
@@ -25,20 +26,32 @@ handler._user = {};
 
 handler._user.get = (requestProps, callback) => {
   if (requestProps.queryStringObj && requestProps.queryStringObj.mobileNo) {
-    db.read(
-      ENTITY.USERS,
+    _token.verify(
       requestProps.queryStringObj.mobileNo,
-      (readErr, data) => {
-        if (!readErr && data) {
-          const user = { ...utilities.parseJson(data) };
-          delete user.password;
-          callback(200, {
-            result: user,
-            message: "Data retrieved.",
-          });
+      requestProps.headerObj.token,
+      (isVerified) => {
+        if (isVerified) {
+          db.read(
+            ENTITY.USERS,
+            requestProps.queryStringObj.mobileNo,
+            (readErr, data) => {
+              if (!readErr && data) {
+                const user = { ...utilities.parseJson(data) };
+                delete user.password;
+                callback(200, {
+                  result: user,
+                  message: "Data retrieved.",
+                });
+              } else {
+                callback(404, {
+                  mesage: "User not found.",
+                });
+              }
+            }
+          );
         } else {
-          callback(404, {
-            mesage: "User not found.",
+          callback(HTTP_STATUS.UNAUTHENTICATE, {
+            message: MESSAGE.AUTH_FAIL,
           });
         }
       }
@@ -58,8 +71,12 @@ handler._user.post = (requestProps, callback) => {
       const encruptedPass = utilities.hash(user.password);
       if (encruptedPass) {
         user.password = encruptedPass;
-        db.create(ENTITY.USERS, user.mobileNo, user, (result) => {
-          callback(200, { message: result });
+        db.create(ENTITY.USERS, user.mobileNo, user, (err) => {
+          if (!err) {
+            callback(200, { message: result });
+          } else {
+            callback(500, { message: "Internal server error" });
+          }
         });
       } else {
         callback(500, {
@@ -75,35 +92,52 @@ handler._user.post = (requestProps, callback) => {
 handler._user.put = (requestProps, callback) => {
   if (requestProps.body && requestProps.body.mobileNo) {
     const updatedUser = { ...requestProps.body };
-    db.read(ENTITY.USERS, updatedUser.mobileNo, (readErr, data) => {
-      if (!readErr && data) {
-        const existUser = { ...utilities.parseJson(data) };
-        if (updatedUser.firstName) {
-          existUser.firstName = updatedUser.firstName;
+    _token.verify(
+      updatedUser.mobileNo,
+      requestProps.headerObj.token,
+      (isVerified) => {
+        if (isVerified) {
+          db.read(ENTITY.USERS, updatedUser.mobileNo, (readErr, data) => {
+            if (!readErr && data) {
+              const existUser = { ...utilities.parseJson(data) };
+              if (updatedUser.firstName) {
+                existUser.firstName = updatedUser.firstName;
+              }
+              if (updatedUser.lastName) {
+                existUser.lastName = updatedUser.lastName;
+              }
+              if (updatedUser.password) {
+                existUser.password = utilities.hash(updatedUser.password);
+              }
+              db.update(
+                ENTITY.USERS,
+                updatedUser.mobileNo,
+                existUser,
+                (err) => {
+                  if (!err) {
+                    callback(200, {
+                      message: "User updated success.",
+                    });
+                  } else {
+                    callback(400, {
+                      message: err,
+                    });
+                  }
+                }
+              );
+            } else {
+              callback(404, {
+                message: "User not found",
+              });
+            }
+          });
+        } else {
+          callback(HTTP_STATUS.UNAUTHENTICATE, {
+            message: MESSAGE.AUTH_FAIL,
+          });
         }
-        if (updatedUser.lastName) {
-          existUser.lastName = updatedUser.lastName;
-        }
-        if (updatedUser.password) {
-          existUser.password = utilities.hash(updatedUser.password);
-        }
-        db.update(ENTITY.USERS, updatedUser.mobileNo, existUser, (err) => {
-          if (!err) {
-            callback(200, {
-              message: "User updated success.",
-            });
-          } else {
-            callback(400, {
-              message: err,
-            });
-          }
-        });
-      } else {
-        callback(404, {
-          message: "User not found",
-        });
       }
-    });
+    );
   } else {
     callback(400, {
       message: "Bad request",
@@ -113,21 +147,37 @@ handler._user.put = (requestProps, callback) => {
 
 handler._user.delete = (requestProps, callback) => {
   if (requestProps.queryStringObj && requestProps.queryStringObj.mobileNo) {
-    db.delete(ENTITY.USERS, requestProps.queryStringObj.mobileNo, (err) => {
-      if(!err){
-        callback(200, {
-          message: 'User deleted.'
-        })
-      }else{
-        callback(500, {
-          message: err
-        })
+    _token.verify(
+      requestProps.queryStringObj.mobileNo,
+      requestProps.headerObj.token,
+      (isVerified) => {
+        if (isVerified) {
+          db.delete(
+            ENTITY.USERS,
+            requestProps.queryStringObj.mobileNo,
+            (err) => {
+              if (!err) {
+                callback(200, {
+                  message: "User deleted.",
+                });
+              } else {
+                callback(500, {
+                  message: err,
+                });
+              }
+            }
+          );
+        } else {
+          callback(HTTP_STATUS.UNAUTHENTICATE, {
+            message: MESSAGE.AUTH_FAIL,
+          });
+        }
       }
-    });
-  }else{
+    );
+  } else {
     callback(400, {
-      message: 'Bad request.'
-    })
+      message: "Bad request.",
+    });
   }
 };
 

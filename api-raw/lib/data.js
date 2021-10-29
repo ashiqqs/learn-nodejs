@@ -21,7 +21,7 @@ db.create = (dir, file, data, callback) => {
           if (!fileWriteErr) {
             fs.close(fileDescriptor, (fileCloseErr) => {
               if (!fileCloseErr) {
-                callback("Data save success.");
+                callback(false);
               } else {
                 callback("Error closing file.");
               }
@@ -87,10 +87,10 @@ db.update = (dir, file, data, callback) => {
  */
 db.delete = (dir, file, callback) => {
   fs.unlink(`${db.baseDir + dir}/${file}.json`, (err) => {
-    if (err) {
-      callback("Error deleting data.");
-    } else {
+    if (!err) {
       callback(false);
+    } else {
+      callback("Error deleting data.");
     }
   });
 };
