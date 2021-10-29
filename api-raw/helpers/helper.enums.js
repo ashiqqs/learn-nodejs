@@ -17,6 +17,7 @@ const FILE_MODE = {
 const ENTITY = {
   USERS: "/users",
   TOKENS: "/tokens",
+  CHECKS:'/checks'
 };
 
 const MESSAGE = {
@@ -29,7 +30,8 @@ const MESSAGE = {
   BAD_REQUEST: "Bad request",
   SERVER_ERR: "Internal server error",
   UNKNOWN: "Unknown error occured.",
-  AUTH_FAIL: 'Authentication failed.'
+  AUTH_FAIL: 'Authentication failed.',
+  NOT_ALLOW: 'Method not allowed.'
 };
 
 const HTTP_STATUS = {

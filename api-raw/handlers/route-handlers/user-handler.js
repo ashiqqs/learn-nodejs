@@ -73,7 +73,7 @@ handler._user.post = (requestProps, callback) => {
         user.password = encruptedPass;
         db.create(ENTITY.USERS, user.mobileNo, user, (err) => {
           if (!err) {
-            callback(200, { message: result });
+            callback(200, { message: MESSAGE.SAVED });
           } else {
             callback(500, { message: "Internal server error" });
           }

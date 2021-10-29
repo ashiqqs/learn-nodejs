@@ -16,8 +16,8 @@ handler.tokenHandler = (requestProps, callback) => {
   if (allowdMethod.indexOf(requestProps.method) >= 0) {
     handler._token[requestProps.method](requestProps, callback);
   } else {
-    callback(405, {
-      message: "Method not allowed",
+    callback(HTTP_STATUS.NOT_ALLOWED, {
+      message: MESSAGE.NOT_ALLOW,
     });
   }
 };

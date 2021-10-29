@@ -8,13 +8,15 @@ const environments = {
         port: 3000,
         envName: 'Staging',
         secretKey: 'MyStagingSecretKey',
-        tokenLength: 20
+        tokenLength: 20,
+        maxChecks: 5
     },
     production: {
         port: 5000,
         envName: 'Production',
         secretKey:"MyProductionSecretKey",
-        tokenLength: 20
+        tokenLength: 20,
+        maxChecks: 5
     }
 }
 
