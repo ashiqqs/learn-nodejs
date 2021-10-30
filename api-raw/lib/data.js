@@ -95,4 +95,22 @@ db.delete = (dir, file, callback) => {
   });
 };
 
+/**
+ * get list
+ */
+
+db.list = (dir, callback) => {
+  fs.readdir(`${db.baseDir + dir}`, (err, files) => {
+    if (!err && files && files instanceof Array) {
+      let listOfFileName = [];
+      files.forEach((file) => {
+        listOfFileName.push(file.replace(".json", ""));
+      });
+      callback(false, listOfFileName);
+    } else {
+      callback(err, []);
+    }
+  });
+};
+
 module.exports = db;
