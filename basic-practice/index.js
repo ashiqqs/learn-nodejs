@@ -1,37 +1,28 @@
-var _ = require("./shared");
-const path = require("path");
-const os = require("os");
-const fs = require("fs");
-const EventEmmiter = require("events");
-const Action = require("./action");
+const express = require('express')
 
-//console.log(path.parse(__filename))
+const app = express();
 
-//_.print(os.version());
-//_.print(os.userInfo());
-//_.print(os.release());
-//_.print(os.freemem());
-//_.print(os.cpus());
+app.set('view engine', 'ejs');
 
-// fs.appendFile("myfile.txt", "\nHello World\n", (err, data) => {
-//   console.log(err);
-//   console.log(data);
-// });
-//fs.renameSync("myfile.text", "myfile.txt");
-// fs.readFile("myfile.txt", (err, data) => {
-//   console.log(err);
-//   console.log(data.toString());
-// });
+app.get('/', (req, res)=>{
 
-const action = new Action();
+  res.format({
+    html: ()=>{
+      res.render('pages/contact',{
+        name: 'Page'
+      })
+    },
+    json: ()=>{
+      res.json({message: 'Hello World'});
+    },
+    default: ()=>{
+      res.status(406).send('Not Acceptable');
+    }
+    
+  });
+}
+);
 
-action.on("fire", (message) => {
-  _.print(message);
-});
-
-action.on("kill", (message) => {
-  _.print(message);
-});
-
-action.fire();
-action.kill();
+app.listen(3000,()=>{
+  console.log('server listening on 3000');
+})
