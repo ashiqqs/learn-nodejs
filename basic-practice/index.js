@@ -3,6 +3,8 @@ const adminRouter = require('./routes/admin-route');
 const multer = require('multer');
 const path = require('path');
 
+const mongoose = require('mongoose');
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -90,3 +92,18 @@ app.use('/admin',adminRouter);
 app.listen(3000,()=>{
   console.log('server listening on 3000');
 })
+
+
+//#region Mongo db connection
+
+mongoose.connect('mongodb://localhost:27017/basic-practice', 
+{useNewUrlParser: true, useUnifiedTopology: true})
+.then(()=>{
+  console.log('Connected to MongoDB');
+})
+.catch(err=>{
+  console.log(err);
+});
+
+
+//#endregion
