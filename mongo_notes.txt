@@ -1,0 +1,23 @@
+Install mongodb server enterprise
+save bin folder as environment folder
+run mongo server service
+
+command
+-------------
+mogo - connect database
+show dbs - show all databases which have data
+use dbname - to create database
+db - db object
+db.collectionName.insertOne({}) - create collection & insert one record
+db.collectionName.find() - show records
+db.collectionName.find().pretty() - show records with formatted
+db.collectionName.insertMany([]) - insert multiple
+db.collectionName.find({}) - show records with condition
+db.collectionName.findOne({}) - show first record with condition
+db.collectionName.find().limit(1) - show records with limit
+db.collectionName.find().limit(1).skip(1) - show records with limit and skip
+db.collectionName.find({}, {fieldName: 0}) - show records with condition and skip field
+db.collectionName.updateOne(conditionObj, {$set: updatedObj}) - update single record
+db.collectionName.updateMany(conditionObj, {$set: updatedObj}) - update multiple record
+db.collectionName.deleteOne(conditionObj) - delete single record
+db.collectionName.deleteMany(conditionObj) - delete multiple record
