@@ -2,10 +2,12 @@ const express = require('express')
 const adminRouter = require('./routes/admin-route');
 const multer = require('multer');
 const path = require('path');
+const todoRouter = require('./routes/todo-route');
 
 const mongoose = require('mongoose');
 
 const app = express();
+app.use(express.json());
 
 app.set('view engine', 'ejs');
 
@@ -104,6 +106,8 @@ mongoose.connect('mongodb://localhost:27017/basic-practice',
 .catch(err=>{
   console.log(err);
 });
+
+app.use('/todo', todoRouter);
 
 
 //#endregion
