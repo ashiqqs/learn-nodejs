@@ -1,13 +1,18 @@
-const express = require('express')
-const adminRouter = require('./routes/admin-route');
 const multer = require('multer');
 const path = require('path');
-const todoRouter = require('./routes/todo-route');
 
+const adminRouter = require('./routes/admin-route');
+const todoRouter = require('./routes/todo-route');
+const userRouter = require('./routes/user-route');
+
+const express = require('express')
 const mongoose = require('mongoose');
+
+const dotenv = require('dotenv');
 
 const app = express();
 app.use(express.json());
+dotenv.config();
 
 app.set('view engine', 'ejs');
 
@@ -108,6 +113,7 @@ mongoose.connect('mongodb://localhost:27017/basic-practice',
 });
 
 app.use('/todo', todoRouter);
+app.use('/user', userRouter);
 
 
 //#endregion

@@ -1,8 +1,11 @@
 const express = require("express");
-const router = express.Router();
 const Todo = require("../models/todo.model");
+const authGuard = require("../middleware/auth-guard.middlware");
+const logger = require("../middleware/logger");
 
-router.get("/", async (req, res) => {
+const router = express.Router();
+
+router.get("/", authGuard, logger, async (req, res) => {
   try {
     const result = await Todo.find({ status: "active" })
       .select({
