@@ -50,4 +50,9 @@ router.post("/login", logMiddleware, async (req, res) => {
   }
 });
 
+router.get('/', async(req, res) => {
+  const users = await User.find().populate('todos', "-_id -__v -date -user");
+  return res.json(users);
+})
+
 module.exports = router;

@@ -19,6 +19,10 @@ const TodoSchema = mongoos.Schema({
     type: Date,
     default: Date.now,
   },
+  user:{
+    type: mongoos.Types.ObjectId,
+    ref: "User",
+  }
 });
 
 //Instance method

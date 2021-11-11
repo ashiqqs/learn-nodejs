@@ -17,7 +17,10 @@ const UserSchema = mongoos.Schema({
     type: String,
     enum: ["active", "completed"],
     default: "active",
-  }
+  },
+  todos: [
+    {type: mongoos.Schema.Types.ObjectId, ref: "Todo"},
+  ]
 });
 
 

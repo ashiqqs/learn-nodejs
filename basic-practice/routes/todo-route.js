@@ -1,5 +1,6 @@
 const express = require("express");
 const Todo = require("../models/todo.model");
+const User = require("../models/user.model");
 const authGuard = require("../middleware/auth-guard.middlware");
 const logger = require("../middleware/logger");
 
@@ -7,12 +8,13 @@ const router = express.Router();
 
 router.get("/", authGuard, logger, async (req, res) => {
   try {
-    const result = await Todo.find({ status: "active" })
+    const result = await Todo.find()
+    .populate("user", "-_id -password")
       .select({
         __v: 0,
         date: 0,
       })
-      .limit(3);
+      //.limit(3);
     res.json(result);
   } catch (err) {
     res.json({ message: err });
@@ -48,12 +50,23 @@ router.get("/:id", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
-  const todo = new Todo(req.body);
-  todo.save((err) => {
+router.post("/", authGuard,logger, async (req, res) => {
+  try{
+    const todo = new Todo({...req.body, user: req.userId});
+    const newTodo = await todo.save();
+    await User.updateOne({
+      _id: req.userId
+    },{
+      $push:{
+        todos: newTodo._id
+      }
+    })
+    res.json(newTodo);
+  }
+  catch(err) {
     if (err) return res.status(500).send(err.message);
     return res.status(200).send(todo);
-  });
+  }
 });
 
 router.post("/many", (req, res) => {
