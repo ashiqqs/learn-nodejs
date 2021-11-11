@@ -1,0 +1,13 @@
+GET http://localhost:3000/user/ HTTP/1.1
+
+###
+GET http://localhost:3000/user/618d4c7a4dfb5c2ad921c905 HTTP/1.1
+Accept: application/xml
+
+###
+POST http://localhost:3000/user/login/ HTTP/1.1
+Content-Type: application/json
+Accept: */*
+Content-Length: 35
+
+{"userName":"ashiq","password":"a"}

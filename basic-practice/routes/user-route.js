@@ -55,4 +55,9 @@ router.get('/', async(req, res) => {
   return res.json(users);
 })
 
+router.get('/:id', async(req, res) => {
+  const users = await User.find({_id:req.params.id}).populate('todos', "-_id -__v -date -user");
+  return res.json(users);
+})
+
 module.exports = router;
