@@ -1,15 +1,17 @@
 function login(req, res, next) {
-  res.json({
-    result: "Not implemented.",
-  });
+  res.render("index");
 }
 
-function getUsers(req, res, next){
-  res.json({
-    result: 'Get All users'
-  })
+function getUsers(req, res, next) {
+  res.render("users");
+}
+
+function addUser(req, res, next) {
+  res.render("addUser");
 }
 
 module.exports = {
-  login, getUsers
+  login,
+  getUsers,
+  addUser,
 };

@@ -1,9 +1,7 @@
-function getInbox(req, res, next){
-    res.json({
-        result: "Get inbox"
-    })
+function getInbox(req, res, next) {
+  res.render("inbox");
 }
 
 module.exports = {
-    getInbox
-}
+  getInbox,
+};

@@ -2,12 +2,24 @@
 const express = require("express");
 
 //internal imports
-const { login, getUsers } = require("../controllers/user.controller");
-
+const { login, getUsers, addUser } = require("../controllers/user.controller");
+const viewHandler = require("../middlewares/common/view-handler.middleware");
+const uploadAvatar = require("../middlewares/users/upload.middleware");
+const {
+  validateUser,
+  validateUserHandler,
+} = require("../middlewares/users/user-validator.middleware");
 const userRoute = express.Router();
 
 //login page
-userRoute.get("/login", login);
-userRoute.get("/", getUsers);
+userRoute.get("/", viewHandler("Login"), login);
+userRoute.get("/user", viewHandler("User"), getUsers);
+userRoute.post(
+  "/user",
+  uploadAvatar,
+  validateUser,
+  validateUserHandler,
+  addUser
+);
 
 module.exports = userRoute;

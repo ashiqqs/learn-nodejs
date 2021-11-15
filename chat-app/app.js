@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const {
   notFoundHandler,
   errorHandler,
-} = require("./middlewares/error-handler.middleware");
+} = require("./middlewares/common/error-handler.middleware");
 const userRoute = require("./routers/user.router");
 const inboxRoute = require("./routers/inbox.router");
 
@@ -40,7 +40,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(cookieParser(process.env.SECRET));
 
 //routing setup
-app.use("/user", userRoute);
+app.use("/", userRoute);
 app.use("/inbox", inboxRoute);
 
 //error handling
