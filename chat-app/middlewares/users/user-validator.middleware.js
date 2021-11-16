@@ -2,6 +2,7 @@ const { check, validationResult } = require("express-validator");
 const createError = require("http-errors");
 const path = require("path");
 const { unlink } = require("fs");
+const User = require("../../models/person.model");
 
 const validateUser = [
   check("name")
@@ -45,22 +46,26 @@ const validateUser = [
 ];
 
 validateUserHandler = function (req, res, next) {
-  const errors = validationResult(req);
-  const mappedErrors = errors.mapped();
-  if (Object.keys(mappedErrors).length === 0) {
-    next();
-  } else {
-    if (res.files.length > 0) {
-      const { fileName } = req.files[0];
-      unlink(
-        path.join(__dirname, `/public/uploads/avatars/${fileName}`),
-        (err) => {
-          if (err) console.error(err);
-        }
-      );
+  try {
+    const errors = validationResult(req);
+    const mappedErrors = errors.mapped();
+    if (Object.keys(mappedErrors).length === 0) {
+      next();
+    } else {
+      if (req.files && req.files.length > 0) {
+        const { fileName } = req.files[0];
+        unlink(
+          path.join(__dirname, `/public/uploads/avatars/${fileName}`),
+          (err) => {
+            if (err) console.error(err);
+          }
+        );
+      }
+      next();
     }
+  } catch (err) {
+    res.status(500).json({ errors: mappedErrors });
   }
-  res.status(500).json({ errors: mappedErrors });
 };
 
 module.exports = {

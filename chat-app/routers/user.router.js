@@ -2,7 +2,12 @@
 const express = require("express");
 
 //internal imports
-const { login, getUsers, addUser } = require("../controllers/user.controller");
+const {
+  login,
+  getUsers,
+  addUser,
+  removeUser,
+} = require("../controllers/user.controller");
 const viewHandler = require("../middlewares/common/view-handler.middleware");
 const uploadAvatar = require("../middlewares/users/upload.middleware");
 const {
@@ -21,5 +26,7 @@ userRoute.post(
   validateUserHandler,
   addUser
 );
+
+userRoute.delete("/user/:id", removeUser);
 
 module.exports = userRoute;
