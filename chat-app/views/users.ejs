@@ -60,7 +60,6 @@
       });
 
       async function deleteUser(id) {
-        alert(id)
         try {
           const response = await fetch(`/user/${id}`, {
             method: "DELETE",

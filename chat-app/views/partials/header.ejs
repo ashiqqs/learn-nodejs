@@ -14,9 +14,38 @@
   </head>
   <body>
     <div class="menu">
+      <% if(loggedInUser && loggedInUser.username) { %>
+      <div class="menu-item"><a href="/inbox">Inbox</a></div>
+      <div class="menu-item"><a href="/user">Users</a></div>
+      <div class="menu-item"><a href="#" onclick="logout()">Logout</a></div>
+      <% } else { %>
       <div class="menu-item"><a href="/inbox">Inbox</a></div>
       <div class="menu-item"><a href="/user">Users</a></div>
       <div class="menu-item"><a href="/">Login</a></div>
+      <% } %>
     </div>
+
+    <script>
+      const logoutToast = Toastify({
+        text: "You have been logged out",
+        duration: 3000,
+      });
+
+      function logout() {
+        fetch("/logout", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((res) => {
+          if (res) {
+            logoutToast.showToast();
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 1000);
+          }
+        });
+      }
+    </script>
   </body>
 </html>
